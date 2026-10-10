@@ -1,0 +1,64 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+
+# ==============================
+# Entornos virtuales de Python
+# ==============================
+.venv/
+venv/
+env/
+ENV/
+
+# ==============================
+# Caché y archivos compilados
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ==============================
+# Editores e IDE
+# ==============================
+.idea/
+.vscode/
+*.sublime-workspace
+
+# ==============================
+# Archivos del sistema operativo
+# ==============================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==============================
+# Variables de entorno y secretos
+# ==============================
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Pruebas y análisis de código
+# ==============================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ==============================
+# Archivos temporales y registros
+# ==============================
+*.log
+*.tmp
+*.bak
+
+# ==============================
+# Archivos de distribución
+# ==============================
+build/
+dist/
+*.egg-info/
