@@ -150,14 +150,6 @@ modelo_comportamiento_atm/
 
 La gráfica de crecimiento/decrecimiento usa los resultados del modelo original. Además, compara mediciones consecutivas del archivo; no estima una tasa continua entre ellas.
 
-## 9. Solución de problemas frecuentes
-
-- **No se encuentra `archivos/clima.xlsx`:** ejecute `python main.py` desde la carpeta principal del proyecto y compruebe que el Excel esté en `archivos/`.
-- **Falta `pandas`, `matplotlib` u `openpyxl`:** active el entorno virtual y ejecute `python -m pip install -r requirements.txt`.
-- **Faltan columnas:** compruebe que los encabezados sean exactamente `Hora`, `Humedad`, `Nubosidad` y `Temperatura`.
-- **Humedad o nubosidad fuera de rango:** corrija los valores para que estén entre 0 y 100.
-- **No se muestran las gráficas:** ejecute el programa en un entorno de escritorio con soporte gráfico.
-
-## 10. Dependencias
+## 9. Dependencias
 
 Las bibliotecas externas necesarias se encuentran en `requirements.txt`. Los módulos `abc` y `pathlib` forman parte de la biblioteca estándar de Python y no requieren instalación adicional.
