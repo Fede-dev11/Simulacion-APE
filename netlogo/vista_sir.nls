@@ -1,0 +1,119 @@
+; Fase 2: reproducción visual del historial de Java.
+; Las posiciones y las identidades visuales son ilustrativas.
+
+globals [vista-cargada? ultima-actualizacion]
+turtles-own [estado-visual]
+
+to startup
+  ; Al abrir el modelo, mostrar el CSV disponible sin iniciar la reproducción.
+  carefully [ cargar-vista ] [ print error-message ]
+end
+
+to cargar-vista
+  cargar-resultados
+  preparar-vista
+end
+
+to preparar-vista
+  clear-turtles
+  clear-drawing
+  ask patches [ set pcolor [245 248 252] ]
+  let columnas ceiling sqrt poblacion-total
+  let filas ceiling (poblacion-total / columnas)
+  let separacion-x world-width / columnas
+  let separacion-y world-height / filas
+
+  create-turtles poblacion-total [
+    set shape "default"
+    set heading 0
+    set size 0.68 * min (list separacion-x separacion-y)
+    set estado-visual "S"
+    set color [35 145 90]
+    setxy (min-pxcor - 0.5 + ((who mod columnas) + 0.5) * separacion-x)
+          (max-pycor + 0.5 - ((floor (who / columnas)) + 0.5) * separacion-y)
+  ]
+  cambiar-primeros (sort turtles) infectados "I" [220 60 60]
+  set vista-cargada? true
+  verificar-conteos-visuales
+
+  clear-all-plots
+  set-current-plot "Evolución SIR"
+  set-plot-x-range 0 (max (list 1 (length registros-csv - 1)))
+  set-plot-y-range 0 (max (list 1 poblacion-total))
+  graficar-registro
+  set ultima-actualizacion timer
+  display
+end
+
+to avanzar-vista
+  exigir-vista
+  if not quedan-registros? [ stop ]
+  avanzar-registro
+
+  ; Recuperar primero a infectados que ya existían. Los recién infectados
+  ; no pueden recuperarse dentro de este mismo registro.
+  let nuevas-recuperaciones recuperados - count turtles with [estado-visual = "R"]
+  cambiar-primeros (sort turtles with [estado-visual = "I"])
+    nuevas-recuperaciones "R" [50 110 210]
+  let nuevos-contagios count turtles with [estado-visual = "S"] - susceptibles
+  cambiar-primeros (sort turtles with [estado-visual = "S"])
+    nuevos-contagios "I" [220 60 60]
+
+  verificar-conteos-visuales
+  graficar-registro
+  set ultima-actualizacion timer
+  display
+end
+
+to reproducir
+  exigir-vista
+  if not quedan-registros? [ stop ]
+  if velocidad <= 0 [ error "La velocidad debe ser mayor que cero." ]
+  ; Se usa tiempo real sin bloquear la interfaz con wait.
+  if timer - ultima-actualizacion >= (1 / velocidad) [
+    avanzar-vista
+  ]
+end
+
+to cambiar-primeros [agentes cantidad estado-nuevo color-nuevo]
+  if (cantidad < 0) or (cantidad > length agentes) [
+    error "No se pueden representar las transiciones de este registro. Recarga el CSV."
+  ]
+  foreach (sublist agentes 0 cantidad) [ persona ->
+    ask persona [
+      set estado-visual estado-nuevo
+      set color color-nuevo
+    ]
+  ]
+end
+
+to verificar-conteos-visuales
+  if (count turtles != poblacion-total) or
+     (count turtles with [estado-visual = "S"] != susceptibles) or
+     (count turtles with [estado-visual = "I"] != infectados) or
+     (count turtles with [estado-visual = "R"] != recuperados) [
+    error "Los agentes de la vista no coinciden con el CSV. Recarga el archivo."
+  ]
+end
+
+to graficar-registro
+  set-current-plot "Evolución SIR"
+  set-current-plot-pen "Susceptibles"
+  plotxy tiempo-actual susceptibles
+  set-current-plot-pen "Infectados"
+  plotxy tiempo-actual infectados
+  set-current-plot-pen "Recuperados"
+  plotxy tiempo-actual recuperados
+end
+
+to exigir-vista
+  if vista-cargada? != true [
+    error "Primero pulsa Cargar CSV para preparar la visualización."
+  ]
+end
+
+to-report estado-lectura
+  if vista-cargada? != true [ report "Pulsa Cargar CSV" ]
+  if not quedan-registros? [ report "Finalizado" ]
+  report "Listo para reproducir"
+end

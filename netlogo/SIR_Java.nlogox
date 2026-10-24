@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<model version="NetLogo 7.0.4" snapToGrid="true">
+  <code>extensions [csv]
+__includes ["lector_csv.nls" "vista_sir.nls"]
+</code>
+  <widgets>
+    <note x="10" y="8" width="440" height="35" fontSize="23" markdown="false" textColorLight="-16777216" textColorDark="-1" backgroundLight="0" backgroundDark="0">SIR · Resultados de Java</note>
+    <button x="10" y="50" width="180" height="42" display="Cargar CSV" kind="Observer" forever="false" disableUntilTicks="false">cargar-vista</button>
+    <button x="200" y="50" width="220" height="42" display="Reproducir / Pausar" kind="Observer" forever="true" disableUntilTicks="false">reproducir</button>
+    <slider x="470" y="45" width="470" height="52" display="velocidad" variable="velocidad" min="1" max="20" step="1" default="3" direction="Horizontal" units="pasos/s" />
+    <monitor x="10" y="105" width="120" height="53" fontSize="12" precision="0" display="Tiempo">tiempo-actual</monitor>
+    <monitor x="140" y="105" width="120" height="53" fontSize="12" precision="0" display="Población">poblacion-total</monitor>
+    <monitor x="270" y="105" width="130" height="53" fontSize="12" precision="0" display="Susceptibles">susceptibles</monitor>
+    <monitor x="410" y="105" width="130" height="53" fontSize="12" precision="0" display="Infectados">infectados</monitor>
+    <monitor x="550" y="105" width="140" height="53" fontSize="12" precision="0" display="Recuperados">recuperados</monitor>
+    <monitor x="700" y="105" width="240" height="53" fontSize="12" precision="0" display="Estado">estado-lectura</monitor>
+    <note x="10" y="162" width="150" height="22" fontSize="12" markdown="false" textColorLight="-14446246" textColorDark="-1" backgroundLight="0" backgroundDark="0">● Susceptibles</note>
+    <note x="165" y="162" width="130" height="22" fontSize="12" markdown="false" textColorLight="-2343876" textColorDark="-1" backgroundLight="0" backgroundDark="0">● Infectados</note>
+    <note x="305" y="162" width="150" height="22" fontSize="12" markdown="false" textColorLight="-13472046" textColorDark="-1" backgroundLight="0" backgroundDark="0">● Recuperados</note>
+    <view x="10" y="190" width="367" height="367" minPxcor="-16" maxPxcor="16" minPycor="-16" maxPycor="16" patchSize="11.0" fontSize="10" wrappingAllowedX="true" wrappingAllowedY="true" updateMode="1" frameRate="30.0" showTickCounter="true" tickCounterLabel="Tiempo CSV" />
+    <plot x="395" y="190" width="545" height="367" display="Evolución SIR" xAxis="Tiempo (pasos)" yAxis="Individuos" xMin="0.0" xMax="100.0" yMin="0.0" yMax="100.0" autoPlotX="false" autoPlotY="false" legend="true">
+      <setup />
+      <update />
+      <pen display="Susceptibles" color="-14446246" interval="1.0" mode="0" legend="true">
+        <setup />
+        <update />
+      </pen>
+      <pen display="Infectados" color="-2343876" interval="1.0" mode="0" legend="true">
+        <setup />
+        <update />
+      </pen>
+      <pen display="Recuperados" color="-13472046" interval="1.0" mode="0" legend="true">
+        <setup />
+        <update />
+      </pen>
+    </plot>
+    <note x="10" y="580" width="930" height="42" fontSize="12" markdown="false" textColorLight="-16777216" textColorDark="-1" backgroundLight="0" backgroundDark="0">Cada círculo representa una persona. Los colores reproducen los conteos del CSV de Java.
+Las posiciones son ilustrativas y no representan contactos reales.</note>
+    <note x="470" y="14" width="470" height="28" fontSize="13" markdown="false" textColorLight="-16777216" textColorDark="-1" backgroundLight="0" backgroundDark="0">Velocidad de reproducción (pasos por segundo)</note>
+  </widgets>
+  <info># Visualización SIR de Java
+
+1. Pulsa Cargar CSV para leer los resultados desde el inicio.
+2. Pulsa Reproducir / Pausar para comenzar; vuelve a pulsarlo para pausar.
+3. Ajusta velocidad para cambiar el ritmo visual de 1 a 20 pasos por segundo.
+4. Para volver al inicio, pausa y pulsa Cargar CSV.
+
+Verde: susceptibles. Rojo: infectados. Azul: recuperados.
+La gráfica contiene las tres series calculadas por Java.
+Las posiciones de los círculos son ilustrativas; no representan contactos reales.
+
+Conserva lector_csv.nls y vista_sir.nls junto al modelo.
+El CSV está en ../resultados/resultados_java.csv.
+Consulta el README.md de la raíz del proyecto para las instrucciones.
+</info>
+  <turtleShapes>
+    <shape name="default" rotatable="false" editableColorIndex="0">
+      <circle x="30" y="30" diameter="240" color="-1920102913" filled="true" marked="true" />
+    </shape>
+  </turtleShapes>
+  <linkShapes />
+  <previewCommands />
+</model>

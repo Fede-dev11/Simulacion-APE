@@ -1,0 +1,134 @@
+; Fase 1: lectura de resultados calculados por Java.
+; Este archivo no ejecuta contagios ni utiliza números aleatorios.
+
+globals [
+  ruta-csv
+  registros-csv
+  indice-registro
+  tiempo-actual
+  susceptibles
+  infectados
+  recuperados
+  poblacion-total
+  datos-cargados?
+]
+
+to cargar-resultados
+  ; La ruta es relativa al modelo guardado en la carpeta netlogo.
+  cargar-csv "../resultados/resultados_java.csv"
+end
+
+to cargar-csv [ruta]
+  if not is-string? ruta [
+    error "La ruta del CSV debe ser un texto entre comillas."
+  ]
+  if not file-exists? ruta [
+    error (word "No existe el CSV: " ruta ". Ejecuta primero el programa Java.")
+  ]
+
+  ; Validar primero en variables locales. Una carga fallida no reemplaza
+  ; el historial que ya estuviera cargado correctamente.
+  let filas []
+  carefully [
+    set filas csv:from-file ruta
+  ] [
+    error (word "No se pudo leer el CSV: " error-message)
+  ]
+  if empty? filas [ error "El CSV está vacío." ]
+  let cabecera ["tiempo" "susceptibles" "infectados" "recuperados"]
+  if first filas != cabecera [
+    error "Cabecera inválida. Se espera: tiempo,susceptibles,infectados,recuperados."
+  ]
+  let historial but-first filas
+  if empty? historial [ error "El CSV no contiene registros de resultados." ]
+  validar-historial historial
+
+  set ruta-csv ruta
+  set registros-csv historial
+  set poblacion-total sum (but-first (first registros-csv))
+  set datos-cargados? true
+  reiniciar-lectura
+end
+
+to validar-historial [historial]
+  let numero 0
+  let total 0
+  let anterior []
+  foreach historial [ fila ->
+    let linea numero + 2
+    if length fila != 4 [
+      error (word "La línea " linea " debe tener exactamente cuatro columnas.")
+    ]
+    foreach fila [ valor ->
+      if not is-number? valor [
+        error (word "La línea " linea " contiene un valor que no es numérico.")
+      ]
+      if (valor < 0) or (valor != floor valor) [
+        error (word "La línea " linea " debe contener enteros no negativos.")
+      ]
+    ]
+    if item 0 fila != numero [
+      error (word "Tiempo inválido en línea " linea ": debe comenzar en 0 y avanzar de uno en uno.")
+    ]
+    let s item 1 fila
+    let i item 2 fila
+    let r item 3 fila
+    ifelse numero = 0 [
+      set total s + i + r
+      if total <= 0 [ error "La población inicial debe ser positiva." ]
+      if r != 0 [ error "El registro inicial debe tener cero recuperados." ]
+    ] [
+      if s > item 1 anterior [
+        error (word "Los susceptibles aumentan en la línea " linea ".")
+      ]
+      if r < item 3 anterior [
+        error (word "Los recuperados disminuyen en la línea " linea ".")
+      ]
+      if ((item 1 anterior) - s) > item 2 anterior [
+        error (word "Hay más nuevos contagios que intentos de contacto posibles en la línea " linea ".")
+      ]
+      if (r - (item 3 anterior)) > item 2 anterior [
+        error (word "Hay más recuperaciones que infectados al inicio del paso en la línea " linea ".")
+      ]
+    ]
+    if s + i + r != total [
+      error (word "No se conserva S + I + R en la línea " linea ".")
+    ]
+    set anterior fila
+    set numero numero + 1
+  ]
+end
+
+to reiniciar-lectura
+  exigir-datos
+  set indice-registro 0
+  aplicar-registro
+  reset-ticks
+end
+
+to avanzar-registro
+  exigir-datos
+  if not quedan-registros? [ stop ]
+  set indice-registro indice-registro + 1
+  aplicar-registro
+  tick-advance 1
+end
+
+to aplicar-registro
+  let fila item indice-registro registros-csv
+  set tiempo-actual item 0 fila
+  set susceptibles item 1 fila
+  set infectados item 2 fila
+  set recuperados item 3 fila
+end
+
+to-report quedan-registros?
+  if datos-cargados? != true [ report false ]
+  report indice-registro < (length registros-csv - 1)
+end
+
+to exigir-datos
+  if datos-cargados? != true [
+    error "Primero ejecuta cargar-resultados para importar el CSV de Java."
+  ]
+end
