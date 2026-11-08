@@ -1,0 +1,4 @@
+Java 24
+Apache Commons Math 3.6.1
+Chi-cuadrado: Gamma.regularizedGammaQ(gl/2, estadistico/2)
+KS bilateral asintótico: 1 - KolmogorovSmirnovTest.ksSum(sqrt(N)*D)

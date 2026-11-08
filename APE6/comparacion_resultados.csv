@@ -1,0 +1,2 @@
+configuracion,N,estados_coinciden,max_diferencia_normalizados,chi2_python,chi2_java,gl,p_chi2_python,p_chi2_java,decision_chi2_python,decision_chi2_java,D_python,D_java,p_ks_python,p_ks_java,decision_ks_python,decision_ks_java
+propuesta_base,10000,True,0,14.16,14.16,9,0.11674646401227584,0.11674646401227581,no se rechaza H0,no se rechaza H0,0.0059602058928460155,0.0059602058928460155,0.86950770002860611,0.8695077000286062,no se rechaza H0,no se rechaza H0

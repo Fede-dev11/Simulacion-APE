@@ -1,0 +1,5 @@
+Python 3.14.4
+SciPy 1.16.3
+Matplotlib 3.10.7
+Chi-cuadrado: scipy.stats.chi2.sf(estadistico, gl)
+KS bilateral asintótico: scipy.stats.kstwobign.sf(sqrt(N) * D)
