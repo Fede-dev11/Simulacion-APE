@@ -18,5 +18,6 @@ mucha información en main.
 | `feature/APE-SIM-14` | Desarrollo correspondiente a APE-SIM-14. | [Ver rama](https://github.com/Fede-dev11/Simulacion-APE/tree/feature/APE-SIM-14) |
 | `feature/APE-SIM-15` | Desarrollo correspondiente a APE-SIM-15. | [Ver rama](https://github.com/Fede-dev11/Simulacion-APE/tree/feature/APE-SIM-15) |
 | `feature/APE-SIM-16` | Desarrollo correspondiente a APE-SIM-16. | [Ver rama](https://github.com/Fede-dev11/Simulacion-APE/tree/feature/APE-SIM-16) |
+| `feature/APE-SIM-17` | Desarrollo correspondiente a APE-SIM-17. | [Ver rama](https://github.com/Fede-dev11/Simulacion-APE/tree/feature/APE-SIM-17) |
 | `main` | Rama principal del proyecto. | [Ver rama principal](https://github.com/Fede-dev11/Simulacion-APE/tree/main) |
 
